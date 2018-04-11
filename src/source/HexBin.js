@@ -13,7 +13,28 @@ import ol_source_Vector from 'ol/source/vector'
 import ol_extent from 'ol/extent'
 import ol_HexGrid from '../render/HexGrid'
 
-(function() {
+
+
+/** A source for hexagonal binning
+* @constructor 
+* @extends {ol_source_Vector}
+* @param {} options ol_source_VectorOptions + ol.HexGridOptions
+*	@param {ol_source_Vector} options.source Source
+*	@param {Number} options.size size of the exagon in map units, default 80000
+*	@param {ol.coordinate} options.origin orgin of the grid, default [0,0]
+*	@param {pointy|flat} options.layout grid layout, default pointy
+*	@param {function|undefined} options.geometryFunction Function that takes an ol.Feature as argument and returns an ol.geom.Point as feature's center. 
+*/
+var ol_source_HexBin = function(options)
+{	options = options || {} ;
+	ol_source_Vector.call (this, options);
+	hexbinInit.call(this, this, options);
+};
+ol.inherits (ol_source_HexBin, ol_source_Vector);
+
+
+
+
 
 /* Implementation */
 function addFeature(f)
@@ -103,22 +124,6 @@ function hexbinInit(source, options)
 	this._origin.on("removefeature", function(e){ removeFeature.call(this, e.feature); }, this);
 };
 
-/** A source for hexagonal binning
-* @constructor 
-* @extends {ol_source_Vector}
-* @param {} options ol_source_VectorOptions + ol.HexGridOptions
-*	@param {ol_source_Vector} options.source Source
-*	@param {Number} options.size size of the exagon in map units, default 80000
-*	@param {ol.coordinate} options.origin orgin of the grid, default [0,0]
-*	@param {pointy|flat} options.layout grid layout, default pointy
-*	@param {function|undefined} options.geometryFunction Function that takes an ol.Feature as argument and returns an ol.geom.Point as feature's center. 
-*/
-var ol_source_HexBin = function(options)
-{	options = options || {} ;
-	ol_source_Vector.call (this, options);
-	hexbinInit.call(this, this, options);
-};
-ol.inherits (ol_source_HexBin, ol_source_Vector);
 
 /**
 * Get the orginal source 
@@ -158,6 +163,6 @@ ol_source_ImageHexBin.prototype.getOriginSource = function()
 };
 */
 
-})();
+
 
 export default ol_source_HexBin
